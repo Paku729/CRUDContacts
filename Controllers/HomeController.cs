@@ -18,18 +18,20 @@ namespace CRUDContacts.Controllers
             this.dbContext = DbContext;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+   
         [HttpGet]
-     public IActionResult Add()
+        public IActionResult Add()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult Add(Contact request)
+        public async Task<IActionResult> Add(Contact request)
         {
             var contact = new Contact()
             {
@@ -40,9 +42,9 @@ namespace CRUDContacts.Controllers
                 BirthDate = request.BirthDate
             };
 
-            dbContext.Contacts.Add(contact);
-            dbContext.SaveChanges();
-            return View();
+            await dbContext.Contacts.AddAsync(contact);
+            await dbContext.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
     }
 }
